@@ -66,7 +66,7 @@ source ~/jupyter_env/bin/activate
 # (e.g. ln -s /groups/gaa50089/[yourname] $HOME/work)
 # then define variables like this
 # $data変数はjobを投げる時に設定する、今回はforで実行したいデータセットを繰り返すあげる
-PYDIR=$HOME/DDDog/GAN
+PYDIR=$HOME/DDDog/GenerarionCell
 
 python $PYDIR/conv_autoencoder.py
 

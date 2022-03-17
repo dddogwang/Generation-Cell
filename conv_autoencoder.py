@@ -17,16 +17,10 @@ import os
 import datetime
 
 print("Read dataloader", flush=True)
-lens = 40
-Data_02Nami=np.load("../NDAcquisition/Classification/imread_02Namix"+str(lens)+"_nomask.npy",allow_pickle=True)
-Data_01=np.load("../NDAcquisition/Classification/imread_01x"+str(lens)+"_nomask.npy",allow_pickle=True)
 dataset=[]
-shape_0=84
-shape_1=84
-for n in range(130147):
-    img = Data_01[n]
-    if shape_0==img.shape[0] and img.shape[1]==shape_1:
-        dataset.append(img/255)
+for name in os.listdir("../NDAcquisition-01x40/"):
+    img=cv2.imread("../NDAcquisition-01x40/"+name)
+    dataset.append(img/255)
 dataset=np.array(dataset)
 print("dataset.shape",dataset.shape, flush=True)
 dataset = np.transpose(dataset, (0, 3, 1, 2))
@@ -90,8 +84,8 @@ starttime = datetime.datetime.now()
 
 
 print("Start train", flush=True)
-if not os.path.exists('./vae_img'):
-    os.mkdir('./vae_img')
+if not os.path.exists('./convae_splitcell'):
+    os.mkdir('./convae_splitcell')
 
 def to_img(x):
     x = x.view(x.size(0), 3, 84, 84)
@@ -113,9 +107,9 @@ for epoch in range(num_epochs):
     # ===================log========================
     endtime = datetime.datetime.now()
     if epoch % 100 == 0: 
-        print('>>> epoch [{}/{}], loss:{:.4f}, time:{:.2f}s'.format(epoch+1, num_epochs, loss.item(), (endtime-starttime).seconds))
+        print('>>> epoch [{}/{}], loss:{:.4f}, time:{:.2f}s'.format(epoch+1, num_epochs, loss.item(), (endtime-starttime).seconds), flush=True)
         pic = to_img(output.cpu().data)
-        save_image(pic, './vae_img/image_{}.png'.format(epoch))
+        save_image(pic, './convae_splitcell/image_{}.png'.format(epoch))
         
 
 torch.save(model.state_dict(), './conv_autoencoder.pth')
